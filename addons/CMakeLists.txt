@@ -56,6 +56,10 @@ if(SUPPORT_FONT AND WANT_TTF)
     option(FREETYPE_BZIP2 "Enable if FreeType static library needs bzip2 linked in." off)
     option(FREETYPE_PNG "Enable if FreeType static library needs png linked in." off)
 
+    if(ALLEGRO_EMSCRIPTEN)
+        set(FREETYPE_FOUND 1)
+        set(FREETYPE_LIBRARY "libfreetype.a" CACHE STRING "lib" FORCE PARENT_SCOPE)
+    endif()
     if(FREETYPE_FOUND)
         set(FREETYPE_TEST_SOURCE "
             #include <ft2build.h>
@@ -117,7 +121,7 @@ if(SUPPORT_FONT AND WANT_TTF)
         set(CMAKE_REQUIRED_INCLUDES)
         set(CMAKE_REQUIRED_LIBRARIES)
 
-        if(TTF_COMPILES)
+        if(TTF_COMPILES OR ALLEGRO_EMSCRIPTEN)
             add_subdirectory(ttf)
             set(SUPPORT_TTF 1 PARENT_SCOPE)
             set(TTF_LINK_WITH ${TTF_LINK_WITH} PARENT_SCOPE)

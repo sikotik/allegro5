@@ -831,7 +831,9 @@ static ALLEGRO_LOCKED_REGION *ogl_lock_compressed_region(ALLEGRO_BITMAP *bitmap,
       }
    }
 
+#ifdef GL_CLIENT_PIXEL_STORE_BIT
    glPopClientAttrib();
+#endif
 
    if (old_disp != NULL) {
       _al_set_current_display_only(old_disp);

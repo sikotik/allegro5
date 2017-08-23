@@ -239,7 +239,7 @@ elseif(WANT_VORBIS)
             VORBIS_COMPILES)
         set(CMAKE_REQUIRED_INCLUDES)
         set(CMAKE_REQUIRED_LIBRARIES)
-        if(VORBIS_COMPILES)
+        if(VORBIS_COMPILES OR ALLEGRO_EMSCRIPTEN)
             set(SUPPORT_VORBIS 1)
         endif()
     endif(VORBIS_FOUND)
@@ -268,6 +268,11 @@ if(SUPPORT_VORBIS)
         list(APPEND ACODEC_LIBRARIES ${VORBIS_LIBRARIES})
     endif()
 endif(SUPPORT_VORBIS)
+
+if(ALLEGRO_EMSCRIPTEN)
+    set(ALLEGRO_CFG_ACODEC_VORBIS 1)
+    list(APPEND ACODEC_SOURCES ogg.c)
+endif()
 
 #
 # Opus
