@@ -90,10 +90,10 @@ include(Common)
 #
 #-----------------------------------------------------------------------------#
 
-if(NOT IPHONE)
+if(NOT IPHONE AND NOT EMSCRIPTEN)
     option(SHARED "Build shared libraries" on)
     set(BUILD_SHARED_LIBS ${SHARED})    # actual CMake variable
-endif(NOT IPHONE)
+endif(NOT IPHONE AND NOT EMSCRIPTEN)
 
 # On some 64-bit platforms, libraries should be installed into `lib64'
 # instead of `lib'.  Set this to 64 to do that.
@@ -334,6 +334,15 @@ if(ALLEGRO_RASPBERRYPI)
    set(ALLEGRO_EXCLUDE_GLX 1)
 endif(ALLEGRO_RASPBERRYPI)
 
+if(EMSCRIPTEN)
+    set(GL_AUTO_BUILD_TYPE "gles2+")
+    set(ALLEGRO_SDL on)
+    set(WANT_OPENAL off)
+    set(CMAKE_EXECUTABLE_SUFFIX ".bc")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${EMSCRIPTEN_USE_FLAGS}")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${EMSCRIPTEN_USE_FLAGS}")
+endif()
+
 if(ALLEGRO_SDL)
    set(ALLEGRO_UNIX 0)
    set(WANT_X11 off)
@@ -451,9 +460,9 @@ include(FindPkgConfig)
 
 include(TestBigEndian)
 
-if(NOT IPHONE)
+if((NOT IPHONE) AND (NOT EMSCRIPTEN))
     test_big_endian(ALLEGRO_BIG_ENDIAN)
-endif(NOT IPHONE)
+endif()
 
 if(NOT ALLEGRO_BIG_ENDIAN)
     set(ALLEGRO_LITTLE_ENDIAN 1)
@@ -593,6 +602,8 @@ if(WANT_OPENGL)
         if(IPHONE)
             set(OPENGLES2_FOUND 1)
             set(OPENGLES2_LIBRARIES "-framework OpenGLES")
+        elseif(EMSCRIPTEN)
+            set(OPENGLES2_FOUND 1)
         else()
             find_package(OpenGLES2)
         endif()
