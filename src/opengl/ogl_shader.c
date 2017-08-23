@@ -26,6 +26,9 @@
    #define snprintf _snprintf
 #endif
 
+//Maemo fix
+#define GLchar char
+
 #ifdef ALLEGRO_CFG_SHADER_GLSL
 
 ALLEGRO_DEBUG_CHANNEL("shader")
