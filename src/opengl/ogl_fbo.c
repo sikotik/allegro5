@@ -232,7 +232,7 @@ static void attach_depth_buffer(ALLEGRO_FBO_INFO *info)
 
 static void attach_multisample_buffer(ALLEGRO_FBO_INFO *info)
 {
-#if !defined ALLEGRO_RASPBERRYPI && (!defined ALLEGRO_ANDROID || defined ALLEGRO_CFG_OPENGLES3)
+#if !defined ALLEGRO_CFG_OPENGLES || defined ALLEGRO_CFG_OPENGLES3
    ALLEGRO_BITMAP *b = info->owner;
    int samples = al_get_bitmap_samples(b);
 

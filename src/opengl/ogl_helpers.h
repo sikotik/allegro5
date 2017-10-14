@@ -83,7 +83,6 @@
    #define glFramebufferTexture2DEXT    glFramebufferTexture2DOES
    #define glGenFramebuffersEXT         glGenFramebuffersOES
    #define glGenerateMipmapEXT          glGenerateMipmapOES
-   #define glOrtho                      glOrthof
    #define glGenRenderbuffersEXT        glGenRenderbuffersOES
    #define glBindRenderbufferEXT        glBindRenderbufferOES
    #define glRenderbufferStorageEXT     glRenderbufferStorageOES

@@ -129,6 +129,7 @@ int _al_ogl_get_glformat(int format, int component)
       glformats[ALLEGRO_PIXEL_FORMAT_SINGLE_CHANNEL_8][2] = GL_RED;
    }
    #else
+   // TODO: Check supported formats by various GLES versions
    static const int glformats[ALLEGRO_NUM_PIXEL_FORMATS][3] = {
       /* Skip pseudo formats */
       {0, 0, 0},
@@ -855,6 +856,7 @@ static ALLEGRO_LOCKED_REGION *ogl_lock_compressed_region(ALLEGRO_BITMAP *bitmap,
 
 static void ogl_unlock_compressed_region(ALLEGRO_BITMAP *bitmap)
 {
+#if !defined ALLEGRO_CFG_OPENGLES
    ALLEGRO_BITMAP_EXTRA_OPENGL *ogl_bitmap = bitmap->extra;
    int lock_format = bitmap->locked_region.format;
    ALLEGRO_DISPLAY *old_disp = NULL;
@@ -927,6 +929,9 @@ static void ogl_unlock_compressed_region(ALLEGRO_BITMAP *bitmap)
 EXIT:
    al_free(ogl_bitmap->lock_buffer);
    ogl_bitmap->lock_buffer = NULL;
+#else
+   (void)bitmap;
+#endif
 }
 
 static void ogl_backup_dirty_bitmap(ALLEGRO_BITMAP *b)
