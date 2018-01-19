@@ -129,6 +129,7 @@ int _al_ogl_get_glformat(int format, int component)
       glformats[ALLEGRO_PIXEL_FORMAT_SINGLE_CHANNEL_8][2] = GL_RED;
    }
    #else
+   // TODO: Check supported formats by various GLES versions
    static const int glformats[ALLEGRO_NUM_PIXEL_FORMATS][3] = {
       /* Skip pseudo formats */
       {0, 0, 0},
@@ -182,8 +183,10 @@ char const *_al_gl_error_string(GLenum e)
       ERR(GL_INVALID_ENUM)
       ERR(GL_INVALID_VALUE)
       ERR(GL_INVALID_OPERATION)
+#ifndef ALLEGRO_CFG_OPENGLES2
       ERR(GL_STACK_OVERFLOW)
       ERR(GL_STACK_UNDERFLOW)
+#endif
       ERR(GL_OUT_OF_MEMORY)
 #ifdef ALLEGRO_CFG_OPENGL_PROGRAMMABLE_PIPELINE
       ERR(GL_INVALID_FRAMEBUFFER_OPERATION)
@@ -457,12 +460,14 @@ static bool ogl_upload_bitmap(ALLEGRO_BITMAP *bitmap)
          post_generate_mipmap = true;
       }
       else {
+#ifndef ALLEGRO_CFG_OPENGLES2
          glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
           e = glGetError();
           if (e) {
               ALLEGRO_ERROR("glTexParameteri for texture %d failed (%s).\n",
                             ogl_bitmap->texture, _al_gl_error_string(e));
           }
+#endif
       }
    }
 
@@ -713,7 +718,7 @@ static void ogl_flip_blocks(ALLEGRO_LOCKED_REGION *lr, int wc, int hc)
 static ALLEGRO_LOCKED_REGION *ogl_lock_compressed_region(ALLEGRO_BITMAP *bitmap,
    int x, int y, int w, int h, int flags)
 {
-#if !defined ALLEGRO_ANDROID && !defined ALLEGRO_IPHONE
+#if !defined ALLEGRO_CFG_OPENGLES
    ALLEGRO_BITMAP_EXTRA_OPENGL *const ogl_bitmap = bitmap->extra;
    ALLEGRO_DISPLAY *disp;
    ALLEGRO_DISPLAY *old_disp = NULL;
@@ -855,6 +860,7 @@ static ALLEGRO_LOCKED_REGION *ogl_lock_compressed_region(ALLEGRO_BITMAP *bitmap,
 
 static void ogl_unlock_compressed_region(ALLEGRO_BITMAP *bitmap)
 {
+#if !defined ALLEGRO_CFG_OPENGLES
    ALLEGRO_BITMAP_EXTRA_OPENGL *ogl_bitmap = bitmap->extra;
    int lock_format = bitmap->locked_region.format;
    ALLEGRO_DISPLAY *old_disp = NULL;
@@ -927,6 +933,9 @@ static void ogl_unlock_compressed_region(ALLEGRO_BITMAP *bitmap)
 EXIT:
    al_free(ogl_bitmap->lock_buffer);
    ogl_bitmap->lock_buffer = NULL;
+#else
+   (void)bitmap;
+#endif
 }
 
 static void ogl_backup_dirty_bitmap(ALLEGRO_BITMAP *b)
