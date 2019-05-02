@@ -519,6 +519,9 @@ static GLXContext create_context_new(int ver, Display *dpy, GLXFBConfig fb,
       attrib[6] = GLX_CONTEXT_PROFILE_MASK_ARB;
       attrib[7] = GLX_CONTEXT_ES_PROFILE_BIT_EXT;
    }
+      attrib[6] = GLX_CONTEXT_PROFILE_MASK_ARB;
+      attrib[7] = GLX_CONTEXT_CORE_PROFILE_BIT_ARB;
+
    return _xglx_glXCreateContextAttribsARB(dpy, fb, ctx, True, attrib);
 }
 
@@ -552,6 +555,7 @@ bool _al_xglx_config_create_context(ALLEGRO_DISPLAY_XGLX *glx)
       else if ((disp->flags & ALLEGRO_OPENGL_3_0) || major != 0) {
          if (major == 0)
             major = 3;
+major=4; minor=0;
          glx->context = create_context_new(glx->glx_version,
             system->gfxdisplay, *glx->fbc, existing_ctx, forward_compat,
                false, major, minor);
