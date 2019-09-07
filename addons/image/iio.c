@@ -70,24 +70,8 @@ bool al_init_image_addon(void)
          success |= al_register_bitmap_saver_f(".gif", _al_save_gdiplus_gif_f);
          success |= al_register_bitmap_saver_f(".png", _al_save_gdiplus_png_f);
          success |= al_register_bitmap_saver_f(".jpg", _al_save_gdiplus_jpg_f);
-         success |= al_register_bitmap_saver_f(".jpeg", _al_save_gdiplus_jpg_f);  
+         success |= al_register_bitmap_saver_f(".jpeg", _al_save_gdiplus_jpg_f);
       }
-   }
-#endif
-
-#ifdef ALLEGRO_CFG_IIO_HAVE_ANDROID
-   {
-      char const *extensions[] = {".webp", ".jpg", ".jpeg", ".ico", ".gif", 
-         ".wbmp", ".png", NULL};
-      int i;
-
-
-      for (i = 0; extensions[i]; i++) {
-         success |= al_register_bitmap_loader(extensions[i], _al_load_android_bitmap);
-         success |= al_register_bitmap_loader_f(extensions[i], _al_load_android_bitmap_f);
-         //success |= al_register_bitmap_saver(extensions[i], _al_save_android_bitmap);
-      }
-      success |= al_register_bitmap_identifier(".webp", _al_identify_webp);
    }
 #endif
 
@@ -116,6 +100,22 @@ bool al_init_image_addon(void)
    success |= al_register_bitmap_loader_f(".webp", _al_load_webp_f);
    success |= al_register_bitmap_saver_f(".webp", _al_save_webp_f);
    success |= al_register_bitmap_identifier(".webp", _al_identify_webp);
+#endif
+
+#ifdef ALLEGRO_CFG_IIO_HAVE_ANDROID
+   {
+      char const *extensions[] = {".webp", ".jpg", ".jpeg", ".ico", ".gif",
+         ".wbmp", ".png", NULL};
+      int i;
+
+
+      for (i = 0; extensions[i]; i++) {
+         success |= al_register_bitmap_loader(extensions[i], _al_load_android_bitmap);
+         success |= al_register_bitmap_loader_f(extensions[i], _al_load_android_bitmap_f);
+         //success |= al_register_bitmap_saver(extensions[i], _al_save_android_bitmap);
+      }
+      success |= al_register_bitmap_identifier(".webp", _al_identify_webp);
+   }
 #endif
 
 #ifdef ALLEGRO_CFG_WANT_NATIVE_IMAGE_LOADER
