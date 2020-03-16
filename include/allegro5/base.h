@@ -55,7 +55,7 @@
 
 #define ALLEGRO_VERSION          5
 #define ALLEGRO_SUB_VERSION      2
-#define ALLEGRO_WIP_VERSION      6
+#define ALLEGRO_WIP_VERSION      7
 
 #ifdef ALLEGRO_UNSTABLE
    #define ALLEGRO_UNSTABLE_BIT  1 << 31
@@ -73,7 +73,7 @@
  */
 #define ALLEGRO_RELEASE_NUMBER   1
 
-#define ALLEGRO_VERSION_STR      "5.2.6"
+#define ALLEGRO_VERSION_STR      "5.2.7"
 #define ALLEGRO_DATE_STR         "2020"
 #define ALLEGRO_DATE             20200207    /* yyyymmdd */
 #define ALLEGRO_VERSION_INT \
