@@ -49,34 +49,12 @@ static const char *default_glsl_pixel_source =
    "varying vec4 varying_color;\n"
    "varying vec2 varying_texcoord;\n"
    "\n"
-   "bool alpha_test_func(float x, int op, float compare);\n"
-   "\n"
    "void main()\n"
    "{\n"
-   "  vec4 c;\n"
    "  if (" ALLEGRO_SHADER_VAR_USE_TEX ")\n"
-   "    c = varying_color * texture2D(" ALLEGRO_SHADER_VAR_TEX ", varying_texcoord);\n"
+   "    gl_FragColor = varying_color * texture2D(" ALLEGRO_SHADER_VAR_TEX ", varying_texcoord);\n"
    "  else\n"
-   "    c = varying_color;\n"
-   "  if (!" ALLEGRO_SHADER_VAR_ALPHA_TEST " || alpha_test_func(c.a, " ALLEGRO_SHADER_VAR_ALPHA_FUNCTION ", "
-                          ALLEGRO_SHADER_VAR_ALPHA_TEST_VALUE "))\n"
-   "    gl_FragColor = c;\n"
-   "  else\n"
-   "    discard;\n"
-   "}\n"
-   "\n"
-   "bool alpha_test_func(float x, int op, float compare)\n"
-   "{\n"
-   // Note: These must be aligned with the ALLEGRO_RENDER_FUNCTION enum values.
-   "  if (op == 0) return false;\n" // ALLEGRO_RENDER_NEVER
-   "  else if (op == 1) return true;\n" // ALLEGRO_RENDER_ALWAYS
-   "  else if (op == 2) return x < compare;\n" // ALLEGRO_RENDER_LESS
-   "  else if (op == 3) return x == compare;\n" // ALLEGRO_RENDER_EQUAL
-   "  else if (op == 4) return x <= compare;\n" // ALLEGRO_RENDER_LESS_EQUAL
-   "  else if (op == 5) return x > compare;\n" // ALLEGRO_RENDER_GREATER
-   "  else if (op == 6) return x != compare;\n" // ALLEGRO_RENDER_NOT_EQUAL
-   "  else if (op == 7) return x >= compare;\n" // ALLEGRO_RENDER_GREATER_EQUAL
-   "  return false;\n"
+   "    gl_FragColor = varying_color;\n"
    "}\n";
 
 #endif /* ALLEGRO_CFG_SHADER_GLSL */
